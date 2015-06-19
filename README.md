@@ -37,7 +37,9 @@ d.getDoubleOf(4); // is 8
 **sort** `sort(list, comparator)`
 
 ```java
-list.sort(Comparator.comparing(n -> n.length()));
+list.sort((a, b) -> a.length() - b.length())
+list.sort(Comparator.comparing(n -> n.length())); // same
+list.sort(Comparator.comparing(String::length)); // same
 //> [Bohr, Tesla, Darwin, Newton, Galilei, Einstein]
 ```
 
