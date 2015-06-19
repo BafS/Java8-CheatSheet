@@ -154,7 +154,7 @@ res = stream.filter(n -> n.substring(0, 1).equals("E"));
 //> Einstein
 
 res = Stream.of(1,2,3,4,5).filter(x -> x < 3);
-//> 2 3
+//> 1 2
 ```
 
 **reduce**<br>
