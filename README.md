@@ -31,8 +31,16 @@ MyMath d = a -> a * 2; // associated to the interface
 d.getDoubleOf(4); // is 8
 ```
 
-## Collections
+---
 
+All examples with "list" use :
+
+```java
+List<String> list = [Bohr, Darwin, Galilei, Tesla, Einstein, Newton]
+```
+
+
+## Collections
 
 **sort** `sort(list, comparator)`
 
@@ -50,7 +58,7 @@ list.removeIf(w -> w.length() < 6);
 //> [Darwin, Galilei, Einstein, Newton]
 ```
 
-**Merge**
+**merge**
 `merge(key, value, remappingFunction)`
 
 ```java
@@ -89,6 +97,7 @@ getPrimes(numbers, StaticMethod::isPrime);
 | `System.out::println`   | `x -> System.out.println(x)` |
 | `Double::new`           | `n -> new Double(n)` |
 | `String[]::new`         | `(int n) -> new String[n]` |
+
 
 ## Streams
 
@@ -266,6 +275,7 @@ Collectors.averagingInt(String::length)
 
 *PS*: Don't forget Optional (like `Map<T, Optional<T>>`) with some Collection methods (like `Collectors.maxBy`).
 
+
 ### Parallel Streams
 
 **Creation**
@@ -282,8 +292,8 @@ Can speed up the `limit` or `distinct`
 stream.parallelStream().unordered().distinct();
 ```
 
-
 *PS*: Work with the streams library. Eg. use `filter(x -> x.length() < 9)` instead of a `forEach` with an `if`.
+
 
 ## Optional
 In Java, it is common to use null to denote absence of result.
@@ -311,16 +321,36 @@ Optional<Double> squareRoot(double x) {
 }
 ```
 
------
+---
 
-All examples with "list" use :
+**Note on inferance limitations**
 
+```java
+interface Pair<A, B> {
+    A first();
+    B second();
+}
 ```
-List<String> list = [Bohr, Darwin, Galilei, Tesla, Einstein, Newton]
+
+A steam of type `Stream<Pair<String, Long>>` :
+
+ - `stream.sorted(Comparator.comparing(Pair::first)) // ok`
+ - `stream.sorted(Comparator.comparing(Pair::first).thenComparing(Pair::second)) // dont work`
+
+Java cannot infer type for the `.comparing(Pair::first)` part and fallback to Object, on which `Pair::first` cannot be applied.
+
+The required type for the whole expression cannot be propagated through the method call (`.thenComparing`) and used to infer type of the first part.
+
+Type *must* be given explicitly.
+
+```java
+stream.sorted(
+    Comparator.<Pair<String, Long>, String>comparing(Pair::first)
+    .thenComparing(Pair::second)
+) // ok
 ```
 
+---
 
 This cheat sheet was based on the lecture of Cay Horstmann
 http://horstmann.com/heig-vd/spring2015/poo/
-
-
