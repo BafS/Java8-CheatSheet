@@ -10,7 +10,7 @@ a -> a * 2; // o simplemente sin tipo
 (a, b) -> a + b; // Suma 2 parametros
 ```
 
-Si lambda tiene mas de una expresion podemos usar `{ }` y `return`
+Si lambda tiene mas de una expresión podemos usar `{ }` y `return`
 
 ```java
 (x, y) -> {
@@ -20,7 +20,7 @@ Si lambda tiene mas de una expresion podemos usar `{ }` y `return`
 }
 ```
 
-Una expresion lambda no puede usarse sola en Java, necesita estar asociada a un interfaz funcional
+Una expresión lambda no puede usarse sola en Java, necesita estar asociada a un interfaz funcional
 
 ```java
 interface MyMath {
@@ -77,9 +77,9 @@ names.merge("Newname", "stein", (old, val) -> old.substring(0, 3) + val);
 ```
 
 
-## Expresion de metodo `Class::staticMethod`
+## Expresión de metodo `Class::staticMethod`
 
-Permite referenciar metodos (y constructores) sin ejecutarlos
+Permite referenciar métodos (y constructores) sin ejecutarlos
 
 ```java
 // Con Lambda:
@@ -89,7 +89,7 @@ getPrimes(numbers, a -> StaticMethod.isPrime(a));
 getPrimes(numbers, StaticMethod::isPrime);
 ```
 
-| Metodo Referenciado | Forma de Lambda |
+| Método Referenciado | Forma de Lambda |
 | ------------------- | --------------- |
 | `StaticMethod::isPrime` | `n -> StaticMethod.isPrime(n)` |
 | `String::toUpperCase`   | `(String w) -> w.toUpperCase()` |
@@ -103,8 +103,8 @@ getPrimes(numbers, StaticMethod::isPrime);
 
 Similares a las colecciones, pero:
 
- - No almacenan su propia informacion
- - La informacion viene de otra parte (colleciones, archivos, db, web, ...)
+ - No almacenan su propia información
+ - La información viene de otra parte (colleciones, archivos, db, web, ...)
  - *immutable* (crean un nuevo stream)
  - *lazy* (solo computa lo que es necesario !)
  
@@ -143,7 +143,7 @@ String str = list.collect(Collectors.joining(", "));
 ```
 
 **map** `map(mapper)`<br>
-Aplica una funcion a cada elemento
+Aplica una función a cada elemento
 
 ```java
 // Aplica "toLowerCase" a cada elemento
@@ -185,7 +185,7 @@ res = stream.limit(3);
 ```
 
 **skip**
-Descarta los primero n elementos
+Descarta los primeros n elementos
 
 ```java
 res = strem.skip(2); // skip Bohr and Darwin
@@ -222,11 +222,11 @@ noneMatch: Comprueba si no hay una "e" en ningun elemento
 Devuelve un stream equivalente que es paralelo
 
 **findAny**
-mas rapido que findFirst en un stream paralelo
+Mas rapido que findFirst en un stream paralelo
 
 ### Streams de tipo primitivo
 
-Los wrappers (como Stream<Integer>) son ineficientes. Requieren de embalar y desembalar cada elemento demsiado. Mejor usar `IntStream`, `DoubleStream`, etc.
+Los wrappers (como Stream<Integer>) son ineficientes. Requieren de embalar y desembalar cada elemento demasiado. Mejor usar `IntStream`, `DoubleStream`, etc.
 
 **Creacion**
 
@@ -239,7 +239,7 @@ Random gen = new Random();
 IntStream rand = gen(1, 9); // stream de aleatorios
 ```
 
-Usa *mapToX* (mapToObj, mapToDouble, etc.) si la funcion produce un valor Object, double, etc.
+Usa *mapToX* (mapToObj, mapToDouble, etc.) si la función produce un valor Object, double, etc.
 
 ### Resultados agrupados
 
@@ -293,12 +293,11 @@ Pueden acelerar el `limit` o `distinct`
 stream.parallelStream().unordered().distinct();
 ```
 
-*PS*: Trabaja con la libreria de streams. Pe. usa `filter(x -> x.length() < 9)` en vez de `forEach` con un`if`.
-*PS*: Work with the streams library. Eg. use `filter(x -> x.length() < 9)` instead of a `forEach` with an `if`.
 
+*PS*: Trabaja con la librería de streams. Pe: usa `filter(x -> x.length() < 9)` en vez de `forEach` con un`if`.
 
 ## Optional
-En Java, es comun usar null para denota ausencia de resutlado.
+En Java, es común usar null para denotar ausencia de resultado.
 Problemas cuando no se comprueban: `NullPointerException`.
 
 ```java
@@ -325,7 +324,7 @@ Optional<Double> squareRoot(double x) {
 
 ---
 
-**Note en la inferencia de la limitacion**
+**Note en la inferencia de la limitación**
 
 ```java
 interface Pair<A, B> {
@@ -339,12 +338,11 @@ Un stream de tipo `Stream<Pair<String, Long>>` :
  - `stream.sorted(Comparator.comparing(Pair::first)) // vale`
  - `stream.sorted(Comparator.comparing(Pair::first).thenComparing(Pair::second)) // no funciona`
 
-Java cannot infer type for the `.comparing(Pair::first)` part y volver al Objeto, por lo que `Pair::first` no podria ser aplicado.
+Java no puede inferir el tipo para la parte de `.comparing(Pair::first)`y devolver el Objeto, por lo que `Pair::first` no podría ser aplicado.
 
-El tipo requerido para toda la expresion no puede ser propagada a traves de la llamada del metodo (`.thenComparing`) y  ser usada para inferir el tipo de la primera parte.
+El tipo requerido para toda la expresión no puede ser propagada a través de la llamada del método (`.thenComparing`) y  ser usada para inferir el tipo de la primera parte.
 
 El tipo *debe* ser dado explicitamente
-Type *must* be given explicitly.
 
 ```java
 stream.sorted(
@@ -355,5 +353,5 @@ stream.sorted(
 
 ---
 
-Esta cheat sheet esta basada en la leccion de Cay Horstmann
+Esta cheat sheet esta basada en la lección de Cay Horstmann
 http://horstmann.com/heig-vd/spring2015/poo/
