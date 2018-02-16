@@ -1,7 +1,7 @@
 
 # JAVA 8 - Cheat Sheet
 
-## Expresion Lambda
+## Expresión Lambda
 ```java
 (int a) -> a * 2; // Calcula el docble de a
 a -> a * 2; // o simplemente sin tipo
