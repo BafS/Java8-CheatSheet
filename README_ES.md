@@ -1,5 +1,5 @@
 
-# JAVA 8 - Cheat Sheet
+# JAVA 8 - Chuleta
 
 ## Expresión Lambda
 ```java
