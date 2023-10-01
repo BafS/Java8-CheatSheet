@@ -2,10 +2,12 @@
 # JAVA 8 - 备忘录
 
 ## Lambda 表达式
+
 ```java
 (int a) -> a * 2; // 求a乘以2后的值
 a -> a * 2; // 或者更直接的去掉类型也是可以的
 ```
+
 ```java
 (a, b) -> a + b; // 相加
 ```
@@ -14,9 +16,9 @@ a -> a * 2; // 或者更直接的去掉类型也是可以的
 
 ```java
 (x, y) -> {
-	int sum = x + y;
-	int avg = sum / 2;
-	return avg;
+    int sum = x + y;
+    int avg = sum / 2;
+    return avg;
 }
 ```
 
@@ -26,7 +28,7 @@ a -> a * 2; // 或者更直接的去掉类型也是可以的
 interface MyMath {
     int getDoubleOf(int a);
 }
-	
+
 MyMath d = a -> a * 2; // 关联到具体的接口实现
 d.getDoubleOf(4); // is 8
 ```
@@ -121,7 +123,7 @@ Stream<String> longNames = list
 Stream<Integer> stream = Stream.of(1, 2, 3, 5, 7, 11);
 Stream<String> stream = Stream.of("Jazz", "Blues", "Rock");
 Stream<String> stream = Stream.of(myArray); // 通过数组
-list.stream(); // 通过list
+Stream<String> stream = list.stream(); // 通过list
 
 // Infinit stream [0; inf[
 Stream<Integer> integers = Stream.iterate(0, n -> n + 1);
@@ -140,9 +142,9 @@ Set<String> mySet = stream.collect(Collectors.toSet());
 // 返回成String
 String str = list.collect(Collectors.joining(", "));
 
-//返回成一个LinkedHashMap
+// 返回成一个LinkedHashMap
 list.stream().collect(Collectors.toMap(k -> k, v -> v, (a, b) -> a, LinkedHashMap::new));
-//默认转换成HashMap
+// 默认转换成HashMap
 list.stream().collect(Collectors.toMap(k -> k, v -> v));
 ```
 
@@ -151,11 +153,11 @@ list.stream().collect(Collectors.toMap(k -> k, v -> v));
 
 ```java
 // 对每个元素使用 "toLowerCase" 处理
-res = stream.map(w -> w.toLowerCase());
-res = stream.map(String::toLowerCase);
+Stream<String> res = stream.map(w -> w.toLowerCase());
+Stream<String> res = stream.map(String::toLowerCase);
 //> bohr darwin galilei tesla einstein newton
 
-res = Stream.of(1,2,3,4,5).map(x -> x + 1);
+Stream<Integer> res = Stream.of(1, 2, 3, 4, 5).map(x -> x + 1);
 //> 2 3 4 5 6
 ```
 
@@ -167,7 +169,7 @@ res = Stream.of(1,2,3,4,5).map(x -> x + 1);
 res = stream.filter(n -> n.substring(0, 1).equals("E"));
 //> Einstein
 
-res = Stream.of(1,2,3,4,5).filter(x -> x < 3);
+res = Stream.of(1, 2, 3, 4, 5).filter(x -> x < 3);
 //> 1 2
 ```
 
@@ -175,12 +177,11 @@ res = Stream.of(1,2,3,4,5).filter(x -> x < 3);
 汇聚处理成为单一返回结果
 
 ```java
-String reduced = stream
-	.reduce("", (acc, el) -> acc + "|" + el);
+String reduced = stream.reduce("", (acc, el) -> acc + "|" + el);
 //> |Bohr|Darwin|Galilei|Tesla|Einstein|Newton
 ```
 
-**limit** `limit(maxSize)`
+**limit** `limit(maxSize)`<br>
 保留前`maxSize`个元素
 
 ```java
@@ -188,23 +189,23 @@ res = stream.limit(3);
 //> Bohr Darwin Galilei
 ```
 
-**skip**
+**skip**<br>
 忽略掉前`n`个元素
 
 ```java
-res = strem.skip(2); // 忽略 Bohr 和 Darwin
+res = stream.skip(2); // 忽略 Bohr 和 Darwin
 //> Galilei Tesla Einstein Newton
 ```
 
-**distinct**
-去重
+**distinct**<br>
+去除重复的元素
 
 ```java
-res = Stream.of(1,0,0,1,0,1).distinct();
+res = Stream.of(1, 0, 0, 1, 0, 1).distinct();
 //> 1 0
 ```
 
-**sorted**
+**sorted**<br>
 排序 (必须使用 *Comparable* 接口)
 
 ```java
@@ -212,8 +213,8 @@ res = stream.sorted();
 //> Bohr Darwin Einstein Galilei Newton Tesla 
 ```
 
-**allMatch**
-全匹配
+**allMatch** / **noneMatch**
+
 ```java
 // 检查是否每个元素都是“e”开头
 boolean res = words.allMatch(n -> n.contains("e"));
@@ -222,10 +223,10 @@ boolean res = words.allMatch(n -> n.contains("e"));
 `anyMatch`: 只要其中一个元素包含"e"即可 <br>
 `noneMatch`: 元素里面是否没有"e" 
 
-**parallel**
+**parallel**<br>
 返回一个并行的stream
 
-**findAny**
+**findAny**<br>
 在并行流上findFirst执行更快
 
 ### 原始类型的 Streams
@@ -251,8 +252,7 @@ IntStream rand = gen(1, 9); // stream of randoms
 
 ```java
 // 通过长度分组
-Map<Integer, List<String>> groups = stream
-	.collect(Collectors.groupingBy(w -> w.length()));
+Map<Integer, List<String>> groups = stream.collect(Collectors.groupingBy(w -> w.length()));
 //> 4=[Bohr], 5=[Tesla], 6=[Darwin, Newton], ...
 ```
 
@@ -260,18 +260,18 @@ Map<Integer, List<String>> groups = stream
 
 ```java
 // 和之前一样但是使用的是Set
-... Collectors.groupingBy(
-	w -> w.substring(0, 1), Collectors.toSet()) ...
+Map<String, Set<String>> groups2 = stream.collect(Collectors.groupingBy(w -> w.substring(0, 1), Collectors.toSet()));
+//> {B=[Bohr], T=[Tesla], D=[Darwin], E=[Einstein], G=[Galilei], N=[Newton]}
 ```
 
-**Collectors.counting**  
+**Collectors.counting**<br>
 获取元素总算
 
-**Collectors.summing__**  
+**Collectors.summing__**<br>
 `summingInt`, `summingLong`, `summingDouble` 计算所有元素值相加后结果
 
-**Collectors.averaging__** 
-`averagingInt`, `averagingLong`, ...
+**Collectors.averaging__**<br>
+`averagingInt`, `averagingLong`, ... 计算所有元素值的算术平均值
 
 ```java
 // 计算平均数
@@ -301,6 +301,7 @@ stream.parallelStream().unordered().distinct();
 
 
 ## Optional
+
 在Java, 通常使用`null`表示没有结果，但是如果不检查的话很容易出现`NullPointerException`.
 
 ```java
@@ -337,9 +338,8 @@ interface Pair<A, B> {
 ```
 
 一个 steam 类型 `Stream<Pair<String, Long>>` :
-
- - `stream.sorted(Comparator.comparing(Pair::first)) // 有效`
- - `stream.sorted(Comparator.comparing(Pair::first).thenComparing(Pair::second)) // 无效`
+- `stream.sorted(Comparator.comparing(Pair::first)) // 有效`
+- `stream.sorted(Comparator.comparing(Pair::first).thenComparing(Pair::second)) // 无效`
 
 Java不能通过 `.comparing(Pair::first)`回调过来的数据来判断类型, 故 `Pair::first` 就不能这样用了
 
@@ -356,4 +356,3 @@ stream.sorted(
 
 This cheat sheet was based on the lecture of Cay Horstmann
 http://horstmann.com/heig-vd/spring2015/poo/
-
