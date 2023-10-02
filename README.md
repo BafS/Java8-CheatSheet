@@ -2,10 +2,12 @@
 # JAVA 8 - Cheat Sheet
 
 ## Lambda Expression
+
 ```java
 (int a) -> a * 2; // Calculate the double of a
 a -> a * 2; // or simply without type
 ```
+
 ```java
 (a, b) -> a + b; // Sum of 2 parameters
 ```
@@ -14,9 +16,9 @@ If the lambda is more than one expression we can use `{ }` and `return`
 
 ```java
 (x, y) -> {
-	int sum = x + y;
-	int avg = sum / 2;
-	return avg;
+    int sum = x + y;
+    int avg = sum / 2;
+    return avg;
 }
 ```
 
@@ -26,7 +28,7 @@ A lambda expression cannot stand alone in Java, it need to be associated to a fu
 interface MyMath {
     int getDoubleOf(int a);
 }
-	
+
 MyMath d = a -> a * 2; // associated to the interface
 d.getDoubleOf(4); // is 8
 ```
@@ -121,7 +123,7 @@ Stream<String> longNames = list
 Stream<Integer> stream = Stream.of(1, 2, 3, 5, 7, 11);
 Stream<String> stream = Stream.of("Jazz", "Blues", "Rock");
 Stream<String> stream = Stream.of(myArray); // or from an array
-list.stream(); // or from a list
+Stream<String> stream = list.stream(); // or from a list
 
 // Infinit stream [0; inf[
 Stream<Integer> integers = Stream.iterate(0, n -> n + 1);
@@ -146,11 +148,11 @@ Applying a function to each element
 
 ```java
 // Apply "toLowerCase" for each element
-res = stream.map(w -> w.toLowerCase());
-res = stream.map(String::toLowerCase);
+Stream<String> res = stream.map(w -> w.toLowerCase());
+Stream<String> res = stream.map(String::toLowerCase);
 //> bohr darwin galilei tesla einstein newton
 
-res = Stream.of(1,2,3,4,5).map(x -> x + 1);
+Stream<Integer> res = Stream.of(1, 2, 3, 4, 5).map(x -> x + 1);
 //> 2 3 4 5 6
 ```
 
@@ -162,7 +164,7 @@ Retains elements that match the predicate
 res = stream.filter(n -> n.substring(0, 1).equals("E"));
 //> Einstein
 
-res = Stream.of(1,2,3,4,5).filter(x -> x < 3);
+res = Stream.of(1, 2, 3, 4, 5).filter(x -> x < 3);
 //> 1 2
 ```
 
@@ -170,36 +172,35 @@ res = Stream.of(1,2,3,4,5).filter(x -> x < 3);
 Reduce the elements to a single value
 
 ```java
-String reduced = stream
-	.reduce("", (acc, el) -> acc + "|" + el);
+String reduced = stream.reduce("", (acc, el) -> acc + "|" + el);
 //> |Bohr|Darwin|Galilei|Tesla|Einstein|Newton
 ```
 
-**limit** `limit(maxSize)`
-The n first elements
+**limit** `limit(maxSize)`<br>
+Select the n first elements
 
 ```java
 res = stream.limit(3);
 //> Bohr Darwin Galilei
 ```
 
-**skip**
+**skip**<br>
 Discarding the first n elements
 
 ```java
-res = strem.skip(2); // skip Bohr and Darwin
+res = stream.skip(2); // skip Bohr and Darwin
 //> Galilei Tesla Einstein Newton
 ```
 
-**distinct**
+**distinct**<br>
 Remove duplicated elemetns
 
 ```java
-res = Stream.of(1,0,0,1,0,1).distinct();
+res = Stream.of(1, 0, 0, 1, 0, 1).distinct();
 //> 1 0
 ```
 
-**sorted**
+**sorted**<br>
 Sort elements (must be *Comparable*)
 
 ```java
@@ -207,7 +208,7 @@ res = stream.sorted();
 //> Bohr Darwin Einstein Galilei Newton Tesla 
 ```
 
-**allMatch**
+**allMatch** / **noneMatch**
 
 ```java
 // Check if there is a "e" in each elements
@@ -217,10 +218,10 @@ boolean res = words.allMatch(n -> n.contains("e"));
 anyMatch: Check if there is a "e" in an element<br>
 noneMatch: Check if there is no "e" in elements
 
-**parallel**
+**parallel**<br>
 Returns an equivalent stream that is parallel
 
-**findAny**
+**findAny**<br>
 faster than findFirst on parallel streams
 
 ### Primitive-Type Streams
@@ -246,27 +247,26 @@ Use *mapToX* (mapToObj, mapToDouble, etc.) if the function yields Object, double
 
 ```java
 // Groupe by length
-Map<Integer, List<String>> groups = stream
-	.collect(Collectors.groupingBy(w -> w.length()));
-//> 4=[Bohr], 5=[Tesla], 6=[Darwin, Newton], ...
+Map<Integer, List<String>> groups = stream.collect(Collectors.groupingBy(w -> w.length()));
+//> {4=[Bohr], 5=[Tesla], 6=[Darwin, Newton], 7=[Galilei], 8=[Einstein]}
 ```
 
 **Collectors.toSet**
 
 ```java
 // Same as before but with Set
-... Collectors.groupingBy(
-	w -> w.substring(0, 1), Collectors.toSet()) ...
+Map<String, Set<String>> groups2 = stream.collect(Collectors.groupingBy(w -> w.substring(0, 1), Collectors.toSet()));
+//> {B=[Bohr], T=[Tesla], D=[Darwin], E=[Einstein], G=[Galilei], N=[Newton]}
 ```
 
-**Collectors.counting**
+**Collectors.counting**<br>
 Count the number of values in a group
 
-**Collectors.summing__**
+**Collectors.summing__**<br>
 `summingInt`, `summingLong`, `summingDouble` to sum group values
 
-**Collectors.averaging__**
-`averagingInt`, `averagingLong`, ... 
+**Collectors.averaging__**<br>
+`averagingInt`, `averagingLong`, ... to average group values
 
 ```java
 // Average length of each element of a group
@@ -296,7 +296,8 @@ stream.parallelStream().unordered().distinct();
 
 
 ## Optional
-In Java, it is common to use null to denote absence of result.
+
+In Java, it is common to use null to denote absence of result.<br>
 Problems when no checks: `NullPointerException`.
 
 ```java
@@ -333,9 +334,8 @@ interface Pair<A, B> {
 ```
 
 A steam of type `Stream<Pair<String, Long>>` :
-
- - `stream.sorted(Comparator.comparing(Pair::first)) // ok`
- - `stream.sorted(Comparator.comparing(Pair::first).thenComparing(Pair::second)) // dont work`
+- `stream.sorted(Comparator.comparing(Pair::first)) // ok`
+- `stream.sorted(Comparator.comparing(Pair::first).thenComparing(Pair::second)) // dont work`
 
 Java cannot infer type for the `.comparing(Pair::first)` part and fallback to Object, on which `Pair::first` cannot be applied.
 
